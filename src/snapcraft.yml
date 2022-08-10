@@ -1,0 +1,46 @@
+name: objection
+base: core20
+version: '1.11.0'
+summary: Objection - runtime mobile exploration
+description: |
+  Objection is a runtime mobile exploration toolkit, powered by Frida,
+  built to help you assess the security posture of your mobile applications,
+  without needing a jailbreak.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode
+
+apps:
+  objection:
+    command: bin/objection
+    environment:
+      PATH: $PATH:$SNAP/usr/lib/jvm/java-11-openjdk-amd64/bin/
+      LD_LIBRARY_PATH: $SNAP/usr/lib/x86_64-linux-gnu/android/
+    plugs:
+      - network
+
+parts:
+  objection:
+    plugin: python
+    python-packages:
+      - objection == 1.11.0
+
+    build-packages:
+      - wget
+
+    override-prime: |
+      snapcraftctl prime
+      wget https://github.com/iBotPeaches/Apktool/releases/download/v2.6.1/apktool_2.6.1.jar -O usr/bin/apktool.jar
+      wget https://raw.githubusercontent.com/iBotPeaches/Apktool/master/scripts/linux/apktool -O usr/bin/apktool
+      chmod +x usr/bin/apktool
+      rm usr/bin/apksigner
+      echo "#!/bin/sh" > usr/bin/apksigner
+      echo "\$SNAP/usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar \$SNAP/usr/lib/android-sdk/build-tools/debian/apksigner.jar" >> usr/bin/apksigner
+      chmod +x usr/bin/apksigner
+
+    stage-packages:
+      - aapt
+      - adb
+      - apksigner
+      - default-jre-headless
+      - zipalign
