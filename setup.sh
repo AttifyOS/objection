@@ -28,7 +28,7 @@ check_env() {
 }
 
 install() {
-  wget https://github.com/AttifyOS/bettercap/releases/download/v1.11.0/objection_1.11.0_amd64.snap -O $APM_TMP_DIR/objection_1.11.0_amd64.snap
+  wget https://github.com/AttifyOS/objection/releases/download/v1.11.0/objection_1.11.0_amd64.snap -O $APM_TMP_DIR/objection_1.11.0_amd64.snap
   sudo snap install $APM_TMP_DIR/objection_1.11.0_amd64.snap --devmode
   rm $APM_TMP_DIR/objection_1.11.0_amd64.snap --devmode
 }
